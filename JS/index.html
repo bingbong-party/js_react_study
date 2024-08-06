@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Document</title>
+    </head>
+    <body>
+        
+        <h1 id="hello">안녕하세요</h1>
+        <h1 id="hi">안녕하세요</h1>
+        <h1 id="helloTwo">안녕하세요</h1>
+
+        <script>
+            document.getElementById('hello').innerHTML = '안녕';
+            document.getElementById('helloTwo').innerHTML = '안녕 16px';
+            document.getElementById('hi').innerHTML = '안녕하소';
+            /**
+             * document : html 문서 그 자체를 의미한다
+             **/
+            document.getElementById('hello').style.color = 'red';
+            document.getElementById('helloTwo').style.fontSize = '16px';
+        </script>
+
+    </body>
+</html>
