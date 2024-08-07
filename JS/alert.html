@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+    <div class="alert-box" id="alertBox">알림팝업
+        <button onclick="setAlertStatus('alertBox', 'none')">닫기</button>
+    </div>
+
+    <button onclick="setAlertStatus('alertBox', 'block')">버튼</button>
+
+    <div class="alert-box" id="idAlertBox">아이디입력</div>
+    <div class="alert-box" id="passwordAlertBox">비밀번호입력</div>
+
+    <button onclick="setAlertStatusAuto('idAlertBox')">아이디 버튼</button>
+    <button onclick="setAlertStatusAuto('passwordAlertBox')">비밀번호 버튼</button>
+
+    <script>
+        function setAlertStatusAuto(id) {
+            var showStatus = document.getElementById(id).style.display;
+            console.log(showStatus)
+
+            if (showStatus == 'none') {
+                document.getElementById(id).style.display = 'block';
+            } else if (showStatus == 'block') {
+                document.getElementById(id).style.display = 'none';
+            } else {
+                document.getElementById(id).style.display = 'block';
+            }
+        }
+
+        function setAlertStatus(id, status) {
+            document.getElementById(id).style.display = status;
+        }
+    </script>
+</body>
+
+</html>
