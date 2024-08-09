@@ -17,7 +17,6 @@ function App() {
   let [likeCountArray, plusLikeCount] = useState([3, 5, 2]);
 
   function clickLikeButton(index) {
-    console.log("왜실행됨????????")
     likeCountArray[index]++;
 
     /**
