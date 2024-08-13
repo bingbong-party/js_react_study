@@ -37,6 +37,10 @@ function App() {
     upStairSort([...postTitles])
   }
 
+  let [modal, setModal] = useState(0);
+
+
+
   return (
     <div className="App">
       <div className="black-nav">
@@ -48,7 +52,11 @@ function App() {
       <button onClick={() => titleUpstairSort()}>제목 오름차순 정렬</button>
 
       <div className="post-list">
-        <h4>{postTitles[0]} <span onClick={() => { clickLikeButton(0) }}>👍</span> {likeCountArray[0]} </h4>
+        <h4 onClick={() => modal == 1 ? setModal(0) : setModal(1)}>
+          {postTitles[0]}
+          <span onClick={() => { clickLikeButton(0) }}>👍</span>
+          {likeCountArray[0]}
+        </h4>
         <p>2월 17일 발행</p>
       </div>
 
@@ -61,8 +69,42 @@ function App() {
         <h4>{postTitles[2]} <span onClick={() => { clickLikeButton(2) }}>👍</span> {likeCountArray[2]} </h4>
         <p>2월 17일 발행</p>
       </div>
+
+      {
+        // html 중간에 조건문 쓰려면 삼항연산자 사용 (if나 반복문 등 사용 불가)
+        modal == 1 ? <Modal /> : null // null : 비어있는 html으로 자주 사용
+      }
+
+
     </div>
   );
+}
+
+/**
+ * - 컴포넌트
+ * 1. function 만들고
+ * 2. return() 안에 html 담기
+ * 3. <함수명></함수명> 으로 사용
+ * 
+ * - 언제 컴포넌트를 쓰는가?
+ * 1. 반복적인 html 축약
+ * 2. 큰페이지들
+ * 3. 자주 변경되는 것들
+ * 
+ * - 컴포넌트의 단점
+ * 1. state 가져다 쓸 때 문제가 생김
+ * 2. 너무 남발하면 좋지 않음
+ */
+function Modal() { // 대문자 시작 -> 컴포넌트 함수 작명 규칙
+  return ( // 태그 병렬 사용 불가 & <div></div> 는 <></>로 대체 가능
+    <>
+      <div className="modal">
+        <h4>제목</h4>
+        <p>날짜</p>
+        <p>상세내용</p>
+      </div>
+    </>
+  )
 }
 
 export default App;
