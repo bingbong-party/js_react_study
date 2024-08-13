@@ -39,7 +39,9 @@ function App() {
 
   let [modal, setModal] = useState(0);
 
-
+  let [modalTitle, setModalTitle] = useState("null");
+  
+  let [modalPostIndex, setModalPostIndex] = useState(null);
 
   return (
     <div className="App">
@@ -51,7 +53,7 @@ function App() {
 
       <button onClick={() => titleUpstairSort()}>제목 오름차순 정렬</button>
 
-      <div className="post-list">
+      {/* <div className="post-list">
         <h4 onClick={() => modal == 1 ? setModal(0) : setModal(1)}>
           {postTitles[0]}
           <span onClick={() => { clickLikeButton(0) }}>👍</span>
@@ -68,11 +70,46 @@ function App() {
       <div className="post-list">
         <h4>{postTitles[2]} <span onClick={() => { clickLikeButton(2) }}>👍</span> {likeCountArray[2]} </h4>
         <p>2월 17일 발행</p>
-      </div>
+      </div> */}
+
+      {
+        postTitles.map(function (postTitle, index) {
+          return (
+            <div className="post-list" key={index}>
+              <h4 onClick={() => {
+                if (modalPostIndex == index) {
+                  if (modal == 1) {
+                    setModal(0)
+                  } else {
+                    setModal(1)
+                  }
+                } else {
+                  setModalPostIndex(index)
+                  setModal(1)
+                }
+
+                setModalTitle(postTitle);
+              }}>
+                {postTitle}
+                <span onClick={() => { clickLikeButton(index) }}>👍</span>
+                {likeCountArray[index]}
+              </h4>
+              <p>2월 17일 발행</p>
+            </div>
+          )
+        })
+      }
 
       {
         // html 중간에 조건문 쓰려면 삼항연산자 사용 (if나 반복문 등 사용 불가)
-        modal == 1 ? <Modal /> : null // null : 비어있는 html으로 자주 사용
+        /**
+         * - 부모->자식 컴포넌트로 state전송하려면 props 문법 사용
+         * 1. <자식컴포넌트 변수={state이름}>
+         * 2. 자식 컴포넌트에서 props 파라미터 받아서 'props.변수' 사용
+         * 3. props 전송은 부모->자식 방향만 가능하다
+         * 4. 병렬관계의 컴포넌트끼리도 props 전송이 불가능하다
+         */
+        modal == 1 ? <Modal modalTitle={modalTitle} /> : null // null : 비어있는 html으로 자주 사용
       }
 
 
@@ -94,14 +131,17 @@ function App() {
  * - 컴포넌트의 단점
  * 1. state 가져다 쓸 때 문제가 생김
  * 2. 너무 남발하면 좋지 않음
+ * 
+ * - 자식 컴포넌트는 부모의 State를 전달받을 수 있음 (ex.Modal 컴포넌트는 App컴포넌트의 postTitles State를 받을 수 있음)
  */
-function Modal() { // 대문자 시작 -> 컴포넌트 함수 작명 규칙
+function Modal(props) { // 대문자 시작 -> 컴포넌트 함수 작명 규칙
   return ( // 태그 병렬 사용 불가 & <div></div> 는 <></>로 대체 가능
     <>
       <div className="modal">
-        <h4>제목</h4>
+        <h4>{props.modalTitle}</h4>
         <p>날짜</p>
         <p>상세내용</p>
+        <button>글 수정</button>
       </div>
     </>
   )
