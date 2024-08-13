@@ -12,12 +12,26 @@ function App() {
   // state 사용 법 - 잠깐 저장하고 싶은 데이터를 괄호 안에 넣음
   // a: state에 보관했던 데이터
   // b: state변경을 도와주는 함수
-  let [blogTitle, func] = useState('내 블로그다 이 자식아');
-  let [postTitles, upStairSort] = useState(['버스트 공략', '레데리2 고수 되는 법', '노멘 최소 스펙']);
-  let [likeCountArray, plusLikeCount] = useState([3, 5, 2]);
+  let [blogTitle, setBlogTitle] = useState('내 블로그다 이 자식아');
+
+  class Post {
+    constructor(title, likeCount, content, date) {
+      this.title = title;
+      this.likeCount = likeCount;
+      this.content = content;
+      this.date = date;
+    }
+  }
+
+  let postlist = [];
+  postlist.push(new Post('버스트 공략', 0, '버스트 공략입니다', '2월 5일'));
+  postlist.push(new Post('레데리2 고수 되는 법', 0, '레데리2 공략입니다', '2월 12일'));
+  postlist.push(new Post('노멘 최소 스펙', 0, '노멘3관문 공략입니다', '4월 5일'));
+
+  let [posts, setPosts] = useState(postlist);
 
   function clickLikeButton(index) {
-    likeCountArray[index]++;
+    posts[index].likeCount++;
 
     /**
      * plusLikeCount([likeCountArray]) 와 같이 하면 바로 html에 적용되지 않음
@@ -28,19 +42,20 @@ function App() {
      * 이 때 plusLikeCount([...likeCountArray])처럼 하면 또 다른 주소값이 부여된
      * 전혀 다른 배열이 생성되기 때문에, State변경이 적용되고 html에도 바로바로 변경값이 적용된다.
      */
-
-    plusLikeCount([...likeCountArray])
+    setPosts([...posts])
   }
 
   function titleUpstairSort() {
-    postTitles.sort();
-    upStairSort([...postTitles])
+    posts.sort((a, b) => a.title.localeCompare(b.title));
+    setPosts([...posts])
   }
 
-  let [modal, setModal] = useState(0);
+  let [modalViewState, setModalViewState] = useState(0);
 
   let [modalTitle, setModalTitle] = useState("null");
-  
+
+  let [modalPost, setModalPost] = useState(new Post);
+
   let [modalPostIndex, setModalPostIndex] = useState(null);
 
   return (
@@ -53,48 +68,36 @@ function App() {
 
       <button onClick={() => titleUpstairSort()}>제목 오름차순 정렬</button>
 
-      {/* <div className="post-list">
-        <h4 onClick={() => modal == 1 ? setModal(0) : setModal(1)}>
-          {postTitles[0]}
-          <span onClick={() => { clickLikeButton(0) }}>👍</span>
-          {likeCountArray[0]}
-        </h4>
-        <p>2월 17일 발행</p>
-      </div>
-
-      <div className="post-list">
-        <h4>{postTitles[1]} <span onClick={() => { clickLikeButton(1) }}>👍</span> {likeCountArray[1]} </h4>
-        <p>2월 17일 발행</p>
-      </div>
-
-      <div className="post-list">
-        <h4>{postTitles[2]} <span onClick={() => { clickLikeButton(2) }}>👍</span> {likeCountArray[2]} </h4>
-        <p>2월 17일 발행</p>
-      </div> */}
-
       {
-        postTitles.map(function (postTitle, index) {
+        posts.map(function (post, index) {
+          let postTitle = post.title;
+          let createDate = post.date;
+          let likeCount = post.likeCount;
+          let content = post.content;
+
           return (
             <div className="post-list" key={index}>
               <h4 onClick={() => {
+                setModalPost(new Post(postTitle, likeCount, content, createDate));
+
                 if (modalPostIndex == index) {
-                  if (modal == 1) {
-                    setModal(0)
+                  if (modalViewState == 1) {
+                    setModalViewState(0)
                   } else {
-                    setModal(1)
+                    setModalViewState(1)
                   }
                 } else {
                   setModalPostIndex(index)
-                  setModal(1)
+                  setModalViewState(1)
                 }
 
                 setModalTitle(postTitle);
               }}>
                 {postTitle}
                 <span onClick={() => { clickLikeButton(index) }}>👍</span>
-                {likeCountArray[index]}
+                {likeCount}
               </h4>
-              <p>2월 17일 발행</p>
+              <p>{createDate} 발행</p>
             </div>
           )
         })
@@ -109,10 +112,8 @@ function App() {
          * 3. props 전송은 부모->자식 방향만 가능하다
          * 4. 병렬관계의 컴포넌트끼리도 props 전송이 불가능하다
          */
-        modal == 1 ? <Modal modalTitle={modalTitle} /> : null // null : 비어있는 html으로 자주 사용
+        modalViewState == 1 ? <Modal modalPost={modalPost} /> : null // null : 비어있는 html으로 자주 사용
       }
-
-
     </div>
   );
 }
@@ -135,12 +136,16 @@ function App() {
  * - 자식 컴포넌트는 부모의 State를 전달받을 수 있음 (ex.Modal 컴포넌트는 App컴포넌트의 postTitles State를 받을 수 있음)
  */
 function Modal(props) { // 대문자 시작 -> 컴포넌트 함수 작명 규칙
+  let postTitle = props.modalPost.title;
+  let createDate = props.modalPost.date;
+  let content = props.modalPost.content;
+
   return ( // 태그 병렬 사용 불가 & <div></div> 는 <></>로 대체 가능
     <>
       <div className="modal">
-        <h4>{props.modalTitle}</h4>
-        <p>날짜</p>
-        <p>상세내용</p>
+        <h4>{postTitle}</h4>
+        <p>{createDate}</p>
+        <p>{content}</p>
         <button>글 수정</button>
       </div>
     </>
