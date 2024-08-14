@@ -30,6 +30,16 @@ function App() {
 
   let [posts, setPosts] = useState(postlist);
 
+  let [postContentInput, setPostContentInput] = useState('');
+
+  let [modalViewState, setModalViewState] = useState(0);
+
+  let [modalTitle, setModalTitle] = useState("null");
+
+  let [modalPost, setModalPost] = useState(new Post);
+
+  let [modalPostIndex, setModalPostIndex] = useState(null);
+
   function clickLikeButton(index) {
     posts[index].likeCount++;
 
@@ -50,13 +60,26 @@ function App() {
     setPosts([...posts])
   }
 
-  let [modalViewState, setModalViewState] = useState(0);
+  function createPost(title) {
+    posts.push(new Post(
+      title,
+      0,
+      '기본 내용입니다',
+      '8월 14일'
+    ))
 
-  let [modalTitle, setModalTitle] = useState("null");
+    setPosts([...posts])
+  }
 
-  let [modalPost, setModalPost] = useState(new Post);
+  function deletePost(index) {
+    posts.splice(index, 1);
 
-  let [modalPostIndex, setModalPostIndex] = useState(null);
+    if (modalViewState == 1 && modalPostIndex == index) {
+      setModalViewState(0);
+    }
+
+    setPosts([...posts])
+  }
 
   return (
     <div className="App">
@@ -94,8 +117,14 @@ function App() {
                 setModalTitle(postTitle);
               }}>
                 {postTitle}
-                <span onClick={() => { clickLikeButton(index) }}>👍</span>
+                {/** 
+                 * stopPropagation() : 이벤트 버블링 막아줌
+                 * 이벤트버블링? 하위 html태그의 기능이 상위 html로 퍼지는 현상
+                 * 아래에서 stopPropagation()를 쓰지 않으면 좋아요 버튼을 눌러도 모달창 동작이 실행된다.
+                 */}
+                <span onClick={(e) => { e.stopPropagation(); clickLikeButton(index); }}>👍</span>
                 {likeCount}
+                <button onClick={(e) => { e.stopPropagation(); deletePost(index); }}>삭제</button>
               </h4>
               <p>{createDate} 발행</p>
             </div>
@@ -114,6 +143,24 @@ function App() {
          */
         modalViewState == 1 ? <Modal modalPost={modalPost} /> : null // null : 비어있는 html으로 자주 사용
       }
+
+      {
+        /**
+         * 이벤트 헨들러
+         * - onChange
+         * - onClick
+         * - onInput
+         * - onMouseOver
+         * - onScroll
+         */
+      }
+
+      <input onChange={(e) => {
+        // state변경함수(여기선 setPostContentInput)는 비동기함수임
+        setPostContentInput(e.target.value);
+      }}></input>
+      <button onClick={() => { createPost(postContentInput); setPostContentInput("") }}>저장</button>
+
     </div>
   );
 }
