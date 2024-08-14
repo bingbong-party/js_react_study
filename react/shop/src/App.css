@@ -32,7 +32,22 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+.main-bg {
+  height: 600px;
+  /* background-image: url(./image/main_bg.jpg); */
+  background-size: cover;
+  background-position: center;
+}
+
+.item-image {
+  width: 90%;
+  background-size: cover;
+  background-position: ceter;
+  padding-bottom: 3%
 }
