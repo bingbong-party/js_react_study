@@ -1,22 +1,27 @@
 import logo from './logo.svg';
 
-import mainBg from './image/main_bg.jpg';
-import item1 from './image/item1.jpg';
-import item2 from './image/item2.jpg';
-import item3 from './image/item3.jpg';
+import { useState } from 'react';
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
+import itemData from './data.js';
+import ItemDetail from './itemDetail.js';
+
+import { Routes, Route, Link } from 'react-router-dom';
+
 function App() {
+
+  let [items] = useState(itemData);
+
   return (
     <div className="App">
+
       <Navbar bg="dark" data-bs-theme="dark">
         <Container>
           <Navbar.Brand href="#home">BingBong Shop</Navbar.Brand>
@@ -27,30 +32,50 @@ function App() {
         </Container>
       </Navbar>
 
-      <div className='main-bg' style={{ backgroundImage: 'url(' + mainBg + ')' }}></div>
+      <Routes>
+        <Route path="/" element={
+          <div>
+            <div className='main-bg' style={{ backgroundImage: 'url(' + './images/main_bg.jpg' + ')' }}></div>
 
-      <div>
-        <Container>
-          <Row style={{ paddingTop: "3%" }}>
-            <Col>
-              <img className="item-image" src={item1} alt="이미지 로드 에러" />
-              <h4>상품명</h4>
-              <p>상품설명</p>
-            </Col>
-            <Col><img className="item-image" src={item2} alt="이미지 로드 에러" />
-              <h4>상품명</h4>
-              <p>상품설명</p>
-              </Col>
-            <Col><img className="item-image" src={item3} alt="이미지 로드 에러" />
-              <h4>상품명</h4>
-              <p>상품설명</p>
-              </Col>
-          </Row>
-        </Container>
-      </div>
+            <div>
+              <Container>
+                <Row style={{ paddingTop: "3%" }}>
+                  {
+                    items.map(function (item) {
+                      return (
+                        <Card item={item} />
+                      )
+                    })
+                  }
+                </Row>
+              </Container>
+            </div>
+          </div>
+        } />
+        <Route path="/detail" element={<ItemDetail item={items[0]} />} />
+      </Routes>
 
     </div>
   );
+}
+
+function Card(props) {
+  let item = props.item;
+  let itemTitle = item.title;
+  let itemContent = item.content;
+  let itemImage = item.image;
+  let itemPrice = item.price;
+
+  return (
+    <Col>
+      <Link to="/detail">
+        <img className="item-image" src={itemImage} alt="이미지 로드 에러" />
+        <h4>{itemTitle}</h4>
+        <p>{itemContent}</p>
+        <p>{itemPrice}</p>
+      </Link>
+    </Col>
+  )
 }
 
 export default App;
