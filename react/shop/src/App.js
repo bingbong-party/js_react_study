@@ -1,5 +1,3 @@
-import logo from './logo.svg';
-
 import { useState } from 'react';
 
 import './App.css';
@@ -11,23 +9,30 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 import itemData from './data.js';
-import ItemDetail from './itemDetail.js';
+import ItemDetail from './pages/itemDetail.js';
 
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
 
 function App() {
 
   let [items] = useState(itemData);
+
+  // 페이지 이동을 도와주는 useNavigate()
+  let navigate = useNavigate();
 
   return (
     <div className="App">
 
       <Navbar bg="dark" data-bs-theme="dark">
         <Container>
-          <Navbar.Brand href="#home">BingBong Shop</Navbar.Brand>
+          <Navbar.Brand onClick={() => navigate('/')}>BingBong Shop</Navbar.Brand>
           <Nav className="me-auto">
             <Nav.Link href="#features">features</Nav.Link>
-            <Nav.Link href="#pricing">pricing</Nav.Link>
+            <Nav.Link onClick={() => navigate('/detail')}>detail</Nav.Link>
+          {/*
+            navigate(1) : 앞으로 가기
+            navigate(-1) : 뒤로 가기
+           */}
           </Nav>
         </Container>
       </Navbar>
@@ -41,9 +46,9 @@ function App() {
               <Container>
                 <Row style={{ paddingTop: "3%" }}>
                   {
-                    items.map(function (item) {
+                 items.map(item => {
                       return (
-                        <Card item={item} />
+                          <Card navigate = {navigate} item={item} />
                       )
                     })
                   }
@@ -52,7 +57,25 @@ function App() {
             </div>
           </div>
         } />
-        <Route path="/detail" element={<ItemDetail item={items[0]} />} />
+        <Route path="/detail/:itemId" element={<ItemDetail items={items} />} />
+        <Route path="*" element={<h4>없는 페이지다. (404)</h4>} />
+
+        {/*
+         - Nested Routes?
+         Route 태그 안에 Route 태그가 또 들어간 것
+         아래의 member, location 은 각각 /about/member, /about/location 을 의미한다.
+
+         - 바깥 Route 태그의 element 와 내부 Route 태그의 element 가 동시에 보인다.
+         단 바깥 element html 에 <Outlet /> 사용해줘야 함
+         <Outlet /> 이 기입된 위치에 내부 Route 태그의 element html 이 들어감
+
+         - Nested Routes 가 쓰이는 경우
+         여러 페이지를 제작해야 하는데, 각 페이지간의 유사한 부분이 많을 때
+         */}
+        <Route path="/about" element={<About/>}>
+          <Route path="member" element={<div>멤버 about 임</div>} />
+          <Route path="location" element={<div>위치 about 임</div>}/>
+        </Route>
       </Routes>
 
     </div>
@@ -68,13 +91,22 @@ function Card(props) {
 
   return (
     <Col>
-      <Link to="/detail">
+      <div onClick={() => props.navigate("/detail")}>
         <img className="item-image" src={itemImage} alt="이미지 로드 에러" />
         <h4>{itemTitle}</h4>
         <p>{itemContent}</p>
         <p>{itemPrice}</p>
-      </Link>
+      </div>
     </Col>
+  )
+}
+
+function About() {
+  return (
+    <div>
+      <h4>회사 정보임</h4>
+      <Outlet />
+    </div>
   )
 }
 

@@ -1,5 +1,9 @@
+import {useParams} from "react-router-dom";
+
 function ItemDetail(props) {
-    let item = props.item;
+    let {itemId} = useParams();
+    let item = props.items.find(data => data.id == itemId);
+
     let itemTitle = item.title;
     let itemContent = item.content;
     let itemImage = item.image;
