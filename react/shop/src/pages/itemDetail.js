@@ -2,6 +2,8 @@ import {useParams} from "react-router-dom";
 
 function ItemDetail(props) {
     let {itemId} = useParams();
+
+    // === 사용 시 타입까지 같은지 비교하기 때문에 원하는 결과를 얻지 못할 수 있음
     let item = props.items.find(data => data.id == itemId);
 
     let itemTitle = item.title;
