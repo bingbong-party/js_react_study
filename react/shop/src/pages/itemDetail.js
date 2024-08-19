@@ -1,4 +1,16 @@
 import {useParams} from "react-router-dom";
+import styled from "styled-components";
+
+let YellowBtn = styled.button`
+    background : ${ props => props.bgColor };
+    color : ${ props => props.bgColor == 'blue' ? "white" : "black" };
+    padding : 10px
+`
+
+// styled components 는 기존 스타일을 복제해서 쓸 수도 있다.
+let NewBtn = styled.button(YellowBtn)`
+    // 이 부분은 기존 YellowBtn 외의 사항을 커스터마이징할 수 있음
+`
 
 function ItemDetail(props) {
     let {itemId} = useParams();
@@ -21,7 +33,8 @@ function ItemDetail(props) {
                     <h4 className="pt-5">{itemTitle}</h4>
                     <p>{itemContent}</p>
                     <p>{itemPrice}</p>
-                    <button className="btn btn-danger">주문하기</button>
+                    <YellowBtn bgColor="blue">주문하기</YellowBtn>
+                    <YellowBtn bgColor="yellow">주문하기</YellowBtn>
                 </div>
             </div>
         </div>
