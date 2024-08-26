@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {useState} from 'react';
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -8,14 +8,16 @@ import Navbar from 'react-bootstrap/Navbar';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
+import axios from 'axios';
+
 import itemData from './data.js';
 import ItemDetail from './pages/itemDetail.js';
 
-import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
+import {Outlet, Route, Routes, useNavigate} from 'react-router-dom';
 
 function App() {
 
-  let [items] = useState(itemData);
+  let [items, setItems] = useState(itemData);
 
   // 페이지 이동을 도와주는 useNavigate()
   let navigate = useNavigate();
@@ -54,6 +56,16 @@ function App() {
                   }
                 </Row>
               </Container>
+              <button onClick={() => {
+                axios.get('https://codingapple1.github.io/shop/data2.json')
+                    .then((data) => {
+                      data.data.map(item => {items.push(item)});
+                      setItems([...items]);
+                    })
+                    .catch(() => {
+                      console.log("통신실패함")
+                    })
+              }}>버튼</button>
             </div>
           </div>
         } />
