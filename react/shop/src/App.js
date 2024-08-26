@@ -65,6 +65,13 @@ function App() {
                     .catch(() => {
                       console.log("통신실패함")
                     })
+
+                // 동시에 여러개 ajax 요청하기
+                Promise.all(
+                    axios.get('url1'),
+                    axios.get('url2')
+                )
+                    .then((data) => {})
               }}>버튼</button>
             </div>
           </div>
