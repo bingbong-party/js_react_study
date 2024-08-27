@@ -22,6 +22,8 @@ function ItemDetail(props) {
 
     let [showTabNumber, setShowTabNumber] = useState(1);
 
+    let [tabFade, setTabFade] = useState(false);
+
     // useEffect 는 mount, update 시 실행 됨
     useEffect(() => {
         // 해당 부분 코드는 mount, update 시에 실행됨 (렌더링 다 끝나고 동작)
@@ -43,6 +45,24 @@ function ItemDetail(props) {
     }, [inputData]);
     // 뒷부분 []은 useEffect 실행조건 널을 수 있음
     // 즉, 위 처럼 alertStatus 가 들어가있으면 alertStatus 값이 변경될 때 실행됨
+
+    useEffect(() => {
+        /**
+         * <시간차를 두고 setTabFace 를 다시 true 로 변경하는 이유>
+         * useState 는 변경함수를 연속으로 실행할 경우에 마지막 값으로 퉁쳐서 한번만 실행된다. => 리액트의 automatic batching 기능
+         * 즉, 시간차 없이 setTabFade(false); setTabFade(true); 가 연속으로 실행되면 setTabFade(true) 한 번만 실행되는 것과 같음.
+         * 따라서 우리가 원하는 애니메이션 결과를 얻을 수 없기 때문에
+         * setTimeout 함수를 사용해 두 함수 간의 시간차를 두는 것이다.
+         *
+         * 아래처럼 작성할 경우 setTabFade(false) 실행 후, 10ms 뒤에 setTabFade(true) 실행 됨
+         */
+        let fadeTimer = setTimeout(() => { setTabFade(true)}, 10)
+
+        return () => {
+            clearTimeout(fadeTimer);
+            setTabFade(false);
+        }
+    }, [showTabNumber]);
 
     let {itemId} = useParams();
 
@@ -102,7 +122,10 @@ function ItemDetail(props) {
                 </Nav.Item>
             </Nav>
 
-            <TabContents showTabNumber={showTabNumber}/>
+            <div className={"start" + (tabFade ? " end" : "")}>
+            {/*<div className={`start${tabFade ? " end" : ""}`}>*/}
+                <TabContents showTabNumber={showTabNumber}/>
+            </div>
         </div>
     )
 }

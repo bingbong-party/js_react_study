@@ -38,6 +38,17 @@
   }
 }
 
+.start {
+  transform: scale(0);
+  opacity: 0;
+}
+
+.end {
+  transform: scale(1);
+  opacity: 1;
+  transition: opacity 0.5s;
+}
+
 .main-bg {
   height: 600px;
   /* background-image: url(./image/main_bg.jpg); */
@@ -52,11 +63,3 @@
   padding-bottom: 3%
 }
 
-.start {
-  opacity: 0;
-}
-
-.end {
-  opacity: 1;
-  transition: opacity 0.5s;
-}
