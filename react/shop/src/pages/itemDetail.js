@@ -2,6 +2,8 @@ import {useParams} from "react-router-dom";
 import styled from "styled-components";
 import {useEffect, useState} from "react";
 
+import { Nav } from "react-bootstrap";
+
 let YellowBtn = styled.button`
     background : ${ props => props.bgColor };
     color : ${ props => props.bgColor == 'blue' ? "white" : "black" };
@@ -17,6 +19,8 @@ function ItemDetail(props) {
     let [alertStatus, setAlertStatus] = useState(true);
     let [inputData, setInputData] = useState('');
     let [numberAlertStatus, setNumberAlertStatus] = useState(false);
+
+    let [showTabNumber, setShowTabNumber] = useState(1);
 
     // useEffect 는 mount, update 시 실행 됨
     useEffect(() => {
@@ -77,6 +81,26 @@ function ItemDetail(props) {
                     <YellowBtn bgColor="yellow">주문하기</YellowBtn>
                 </div>
             </div>
+
+            <Nav variant="tabs" defaultActiveKey="link0">
+                <Nav.Item>
+                    <Nav.Link eventKey="link0" onClick={() => {
+                        changeShowTabNumber(setShowTabNumber, 1)
+                    }}>버튼1</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link eventKey="link1" onClick={() => {
+                        changeShowTabNumber(setShowTabNumber, 2)
+                    }}>버튼2</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link eventKey="link2" onClick={() => {
+                        changeShowTabNumber(setShowTabNumber, 3)
+                    }}>버튼3</Nav.Link>
+                </Nav.Item>
+            </Nav>
+
+            <TabContents showTabNumber={showTabNumber}/>
         </div>
     )
 }
@@ -88,6 +112,30 @@ function containsNonNumeric(value) {
     // 숫자 외의 문자 검사
     const nonNumericPattern = /[^0-9]/;
     return nonNumericPattern.test(trimmedValue);
+}
+
+function TabContents({showTabNumber}) { // 이런식으로 {} 를 사용하면 props 사용 없이 매개변수 사용 가능
+    if (showTabNumber == 1) {
+        return (
+            <div>내용1</div>
+        )
+    } else if (showTabNumber == 2) {
+        return (
+            <div>내용2</div>
+        )
+    } else if (showTabNumber == 3) {
+        return (
+            <div>내용3</div>
+        )
+    } else {
+        return (
+            <div>에러내용</div>
+        )
+    }
+}
+
+function changeShowTabNumber(setShowTabNumber, tabNumber) {
+    setShowTabNumber(tabNumber);
 }
 
 export default ItemDetail;
