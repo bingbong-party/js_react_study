@@ -48,6 +48,15 @@
 .item-image {
   width: 90%;
   background-size: cover;
-  background-position: ceter;
+  background-position: center;
   padding-bottom: 3%
+}
+
+.start {
+  opacity: 0;
+}
+
+.end {
+  opacity: 1;
+  transition: opacity 0.5s;
 }

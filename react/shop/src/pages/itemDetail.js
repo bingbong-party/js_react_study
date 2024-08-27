@@ -87,17 +87,17 @@ function ItemDetail(props) {
             <Nav variant="tabs" defaultActiveKey="link0">
                 <Nav.Item>
                     <Nav.Link eventKey="link0" onClick={() => {
-                        changeShowTabNumber(setShowTabNumber, 1)
+                        setShowTabNumber(1)
                     }}>버튼1</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
                     <Nav.Link eventKey="link1" onClick={() => {
-                        changeShowTabNumber(setShowTabNumber, 2)
+                        setShowTabNumber(2)
                     }}>버튼2</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
                     <Nav.Link eventKey="link2" onClick={() => {
-                        changeShowTabNumber(setShowTabNumber, 3)
+                        setShowTabNumber(3)
                     }}>버튼3</Nav.Link>
                 </Nav.Item>
             </Nav>
@@ -134,10 +134,6 @@ function TabContents({showTabNumber}) { // 이런식으로 {} 를 사용하면 p
             <div>에러내용</div>
         )
     }
-}
-
-function changeShowTabNumber(setShowTabNumber, tabNumber) {
-    setShowTabNumber(tabNumber);
 }
 
 export default ItemDetail;
