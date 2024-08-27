@@ -2,12 +2,12 @@ import {useParams} from "react-router-dom";
 import styled from "styled-components";
 import {useEffect, useState} from "react";
 
-import { Nav } from "react-bootstrap";
+import {Nav} from "react-bootstrap";
 
 let YellowBtn = styled.button`
-    background : ${ props => props.bgColor };
-    color : ${ props => props.bgColor == 'blue' ? "white" : "black" };
-    padding : 10px
+    background: ${props => props.bgColor};
+    color: ${props => props.bgColor == 'blue' ? "white" : "black"};
+    padding: 10px
 `
 
 // styled components 는 기존 스타일을 복제해서 쓸 수도 있다.
@@ -25,7 +25,9 @@ function ItemDetail(props) {
     // useEffect 는 mount, update 시 실행 됨
     useEffect(() => {
         // 해당 부분 코드는 mount, update 시에 실행됨 (렌더링 다 끝나고 동작)
-        let timer = setTimeout(() => {setAlertStatus(false)}, 2000);
+        let timer = setTimeout(() => {
+            setAlertStatus(false)
+        }, 2000);
 
         if (containsNonNumeric(inputData)) {
             setNumberAlertStatus(true)
@@ -54,7 +56,7 @@ function ItemDetail(props) {
 
     return (
         <div className="container">
-            <div className="alert alert-warning" style={{display : alertStatus?"block":"none"}}>
+            <div className="alert alert-warning" style={{display: alertStatus ? "block" : "none"}}>
                 2초 이내 구매시 할인
             </div>
             <div className="row">
