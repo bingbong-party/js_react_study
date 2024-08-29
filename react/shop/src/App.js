@@ -67,11 +67,11 @@ function App() {
                     })
 
                 // 동시에 여러개 ajax 요청하기
-                Promise.all(
-                    axios.get('url1'),
-                    axios.get('url2')
-                )
-                    .then((data) => {})
+                // Promise.all(
+                //     axios.get('url1'),
+                //     axios.get('url2')
+                // )
+                //     .then((data) => {})
               }}>버튼</button>
             </div>
           </div>
@@ -107,10 +107,11 @@ function Card(props) {
   let itemContent = item.content;
   let itemImage = item.image;
   let itemPrice = item.price;
+  let itemId = item.id;
 
   return (
     <Col>
-      <div onClick={() => props.navigate("/detail")}>
+      <div onClick={() => props.navigate(`/detail/${itemId}`)}>
         <img className="item-image" src={itemImage} alt="이미지 로드 에러" />
         <h4>{itemTitle}</h4>
         <p>{itemContent}</p>

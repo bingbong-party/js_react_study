@@ -54,9 +54,9 @@ function ItemDetail(props) {
          * 따라서 우리가 원하는 애니메이션 결과를 얻을 수 없기 때문에
          * setTimeout 함수를 사용해 두 함수 간의 시간차를 두는 것이다.
          *
-         * 아래처럼 작성할 경우 setTabFade(false) 실행 후, 10ms 뒤에 setTabFade(true) 실행 됨
+         * 아래처럼 작성할 경우 setTabFade(false) 실행 후, 100ms 뒤에 setTabFade(true) 실행 됨
          */
-        let fadeTimer = setTimeout(() => { setTabFade(true)}, 10)
+        let fadeTimer = setTimeout(() => { setTabFade(true)}, 100)
 
         return () => {
             clearTimeout(fadeTimer);
@@ -124,7 +124,7 @@ function ItemDetail(props) {
 
             <div className={"start" + (tabFade ? " end" : "")}>
             {/*<div className={`start${tabFade ? " end" : ""}`}>*/}
-                <TabContents showTabNumber={showTabNumber}/>
+                <TabContents showTabNumber={showTabNumber} item={item}/>
             </div>
         </div>
     )
@@ -139,10 +139,15 @@ function containsNonNumeric(value) {
     return nonNumericPattern.test(trimmedValue);
 }
 
-function TabContents({showTabNumber}) { // 이런식으로 {} 를 사용하면 props 사용 없이 매개변수 사용 가능
+function TabContents(props) { // 이런식으로 {} 를 사용하면 props 사용 없이 매개변수 사용 가능
+    let showTabNumber = props.showTabNumber;
+    let item = props.item;
+
+    let itemTitle = item.title;
+
     if (showTabNumber == 1) {
         return (
-            <div>내용1</div>
+            <div>{itemTitle}</div>
         )
     } else if (showTabNumber == 2) {
         return (
