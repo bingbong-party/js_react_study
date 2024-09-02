@@ -1,8 +1,10 @@
 import {useParams} from "react-router-dom";
 import styled from "styled-components";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 
 import {Nav} from "react-bootstrap";
+
+import {Context1} from "../App";
 
 let YellowBtn = styled.button`
     background: ${props => props.bgColor};
@@ -23,6 +25,8 @@ function ItemDetail(props) {
     let [showTabNumber, setShowTabNumber] = useState(1);
 
     let [tabFade, setTabFade] = useState(false);
+
+    let {itemStack} = useContext(Context1)
 
     // useEffect 는 mount, update 시 실행 됨
     useEffect(() => {

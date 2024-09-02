@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {createContext, useState} from 'react';
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -15,12 +15,17 @@ import ItemDetail from './pages/itemDetail.js';
 
 import {Outlet, Route, Routes, useNavigate} from 'react-router-dom';
 
+// context 를 하나 생성함
+export let Context1 = createContext();
+
 function App() {
 
   let [items, setItems] = useState(itemData);
 
   // 페이지 이동을 도와주는 useNavigate()
   let navigate = useNavigate();
+
+  let [itemStack] = useState([10, 11, 12]);
 
   return (
     <div className="App">
@@ -76,7 +81,12 @@ function App() {
             </div>
           </div>
         } />
-        <Route path="/detail/:itemId" element={<ItemDetail items={items} />} />
+        <Route path="/detail/:itemId" element={
+          // Context1.Provider 으로 둘러쌓인 컴포넌트들은 모두 itemStack, items 를 사용할 수 있다
+          <Context1.Provider value={{itemStack, items}}>
+            <ItemDetail items={items}/>
+          </Context1.Provider>
+        }/>
         <Route path="*" element={<h4>없는 페이지다. (404)</h4>} />
 
         {/*
